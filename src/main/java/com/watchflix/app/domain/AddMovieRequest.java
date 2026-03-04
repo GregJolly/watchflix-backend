@@ -1,0 +1,4 @@
+package com.watchflix.app.domain;
+
+public record AddMovieRequest(Integer tmdbId, MovieStatus status ) {
+}
