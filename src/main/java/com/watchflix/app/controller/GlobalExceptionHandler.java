@@ -1,10 +1,7 @@
 package com.watchflix.app.controller;
 
 import com.watchflix.app.domain.dto.response.ErrorResponseDto;
-import com.watchflix.app.exception.MovieAlreadyAddedException;
-import com.watchflix.app.exception.MovieNotFoundException;
-import com.watchflix.app.exception.MovieNotWatchedException;
-import com.watchflix.app.exception.UserNotFoundException;
+import com.watchflix.app.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,5 +52,12 @@ public class GlobalExceptionHandler {
 
         ErrorResponseDto error = new ErrorResponseDto(errorMessage);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicateUserException(
+            DuplicateUserException ex) {
+        ErrorResponseDto error = new ErrorResponseDto(ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }

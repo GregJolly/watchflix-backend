@@ -16,7 +16,8 @@ public class TmdbMovieResponse {
     private String releaseDate;
 
     private String overview;
-    
+
+    private String director;
     
 
     public Integer getId() {
@@ -60,6 +61,7 @@ public class TmdbMovieResponse {
     }
 
     public String getDirector() {
+        return director;
     }
 
     public List<String> getCast() {
