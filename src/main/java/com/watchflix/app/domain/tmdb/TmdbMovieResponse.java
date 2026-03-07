@@ -18,7 +18,8 @@ public class TmdbMovieResponse {
     private String overview;
 
     private String director;
-    
+
+    private List<String> cast;
 
     public Integer getId() {
         return id;
@@ -64,7 +65,15 @@ public class TmdbMovieResponse {
         return director;
     }
 
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setCast(List<String> cast) {
+        this.cast = cast;
+    }
+
     public List<String> getCast() {
-        return null;
+        return cast;
     }
 }
