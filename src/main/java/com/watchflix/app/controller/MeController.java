@@ -5,14 +5,14 @@ import com.watchflix.app.domain.RateMovieRequest;
 import com.watchflix.app.domain.dto.request.AddMovieRequestDto;
 import com.watchflix.app.domain.dto.request.RateMovieRequestDto;
 import com.watchflix.app.domain.dto.response.UserMovieDto;
+import com.watchflix.app.domain.entity.User;
 import com.watchflix.app.domain.entity.UserMovie;
-import com.watchflix.app.domain.tmdb.TmdbMovieResponse;
 import com.watchflix.app.mapper.UserMapper;
 import com.watchflix.app.service.UserService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,10 +36,12 @@ public class MeController {
 
     @PostMapping(path = "/movies")
     public ResponseEntity<UserMovieDto> addMovies(
-            @RequestParam UUID userId,
+            @AuthenticationPrincipal String username,
             @Valid @RequestBody AddMovieRequestDto dto)//temp
     {
         AddMovieRequest request = userMapper.fromDto(dto );
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         UserMovie userMovie = userService.addMovie(userId, request);
         UserMovieDto userMovieDto = new UserMovieDto(
                 userMovie.getTmdbId(),
@@ -55,8 +57,10 @@ public class MeController {
     }
 
     @PatchMapping(path = "/movies/{tmdbId}/watch")
-    public ResponseEntity<UserMovieDto> toggleWatchList(@RequestParam UUID userId, @PathVariable Integer tmdbId){
+    public ResponseEntity<UserMovieDto> toggleWatchList(@AuthenticationPrincipal String username, @PathVariable Integer tmdbId){
 
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         UserMovie userMovie = userService.toggleWatchList(userId, tmdbId);
         UserMovieDto userMovieDto = new UserMovieDto(
                 tmdbId,
@@ -72,8 +76,10 @@ public class MeController {
     }
 
     @PatchMapping(path = "/movies/{tmdbId}/favorite")
-    public ResponseEntity<UserMovieDto> toggleFavorite(@RequestParam UUID userId, @PathVariable Integer tmdbId){
+    public ResponseEntity<UserMovieDto> toggleFavorite(@AuthenticationPrincipal String username, @PathVariable Integer tmdbId){
 
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         UserMovie userMovie = userService.toggleFavorite(userId, tmdbId);
         UserMovieDto userMovieDto = new UserMovieDto(
                 tmdbId,
@@ -88,7 +94,9 @@ public class MeController {
 
     }
     @PatchMapping(path = "/movies/{tmdbId}/rate")
-    public ResponseEntity<UserMovieDto> rateMovie(@RequestParam UUID userId, @PathVariable Integer tmdbId, @Valid @RequestBody RateMovieRequestDto dto){
+    public ResponseEntity<UserMovieDto> rateMovie(@AuthenticationPrincipal String username, @PathVariable Integer tmdbId, @Valid @RequestBody RateMovieRequestDto dto){
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         RateMovieRequest request = userMapper.fromDto(dto);
         UserMovie userMovie = userService.rateMovie(userId, tmdbId, request);
         UserMovieDto userMovieDto = new UserMovieDto(
@@ -105,14 +113,18 @@ public class MeController {
     }
 
     @DeleteMapping(path = "/movies/{tmdbId}/delete")
-    public ResponseEntity<Void> deleteUserMovie(@RequestParam UUID userId, @PathVariable Integer tmdbId)
+    public ResponseEntity<Void> deleteUserMovie(@AuthenticationPrincipal String username, @PathVariable Integer tmdbId)
     {
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         userService.removeUserMovie(userId, tmdbId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(path = "/movies")
-    public ResponseEntity<List<UserMovieDto>> listUserMovies(@RequestParam UUID userId){
+    public ResponseEntity<List<UserMovieDto>> listUserMovies(@AuthenticationPrincipal String username){
+        User user = userService.getUserByUsername(username);
+        UUID userId = user.getId();
         List<UserMovie> userMovies = userService.listUserMovies(userId);
         return new ResponseEntity<>(userMovies.stream().map(movie -> new UserMovieDto(
                         movie.getTmdbId(),

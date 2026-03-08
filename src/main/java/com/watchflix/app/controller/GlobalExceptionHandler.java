@@ -60,4 +60,10 @@ public class GlobalExceptionHandler {
         ErrorResponseDto error = new ErrorResponseDto(ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(InvalidCredentialException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidCredentialException(InvalidCredentialException x){
+        ErrorResponseDto error = new ErrorResponseDto(x.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
