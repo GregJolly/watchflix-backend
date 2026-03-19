@@ -5,6 +5,7 @@ import com.watchflix.app.domain.dto.request.*;
 import com.watchflix.app.domain.dto.response.AuthResponseDto;
 import com.watchflix.app.domain.dto.response.UserDto;
 import com.watchflix.app.domain.dto.response.UserMovieDto;
+import com.watchflix.app.domain.dto.response.UserProfileDto;
 import com.watchflix.app.domain.entity.User;
 import com.watchflix.app.domain.entity.UserMovie;
 import com.watchflix.app.domain.tmdb.TmdbMovieResponse;
@@ -26,6 +27,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
 
+
     //REQUEST MAPPING
     @Override
     public RegisterRequest fromDto(RegisterRequestDto dto) {
@@ -39,7 +41,7 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public AddMovieRequest fromDto(AddMovieRequestDto dto) {
-        return new AddMovieRequest(dto.tmdbId(), dto.status());
+        return new AddMovieRequest(dto.tmdbId(), dto.status(), dto.title(), dto.posterPath(), dto.releaseDate());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.watchflix.app.domain.AddMovieRequest;
 import com.watchflix.app.domain.RateMovieRequest;
 import com.watchflix.app.domain.dto.request.AddMovieRequestDto;
 import com.watchflix.app.domain.dto.request.RateMovieRequestDto;
+import com.watchflix.app.domain.dto.response.UserDto;
 import com.watchflix.app.domain.dto.response.UserMovieDto;
 import com.watchflix.app.domain.entity.User;
 import com.watchflix.app.domain.entity.UserMovie;
@@ -101,9 +102,9 @@ public class MeController {
         UserMovie userMovie = userService.rateMovie(userId, tmdbId, request);
         UserMovieDto userMovieDto = new UserMovieDto(
                 tmdbId,
-                null,           // title — Phase 2
-                null,           // posterPath — Phase 2
-                null,           // releaseDate — Phase 2
+                userMovie.getTitle(),          // title — Phase 2
+                userMovie.getPosterPath(),           // posterPath — Phase 2
+                userMovie.getReleaseDate(),           // releaseDate — Phase 2
                 userMovie.getStatus(),
                 userMovie.getFavorite(),
                 request.rating()
@@ -112,7 +113,7 @@ public class MeController {
 
     }
 
-    @DeleteMapping(path = "/movies/{tmdbId}/delete")
+    @DeleteMapping(path = "/movies/{tmdbId}")
     public ResponseEntity<Void> deleteUserMovie(@AuthenticationPrincipal String username, @PathVariable Integer tmdbId)
     {
         User user = userService.getUserByUsername(username);
@@ -128,13 +129,21 @@ public class MeController {
         List<UserMovie> userMovies = userService.listUserMovies(userId);
         return new ResponseEntity<>(userMovies.stream().map(movie -> new UserMovieDto(
                         movie.getTmdbId(),
-                        null, null, null,
+                        movie.getTitle(), movie.getPosterPath(), movie.getReleaseDate(),
                         movie.getStatus(),
                         movie.getFavorite(),
                         movie.getRating()
                 ))
                 .toList(), HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<UserDto> getMe(@AuthenticationPrincipal  String username)
+    {
+        User user = userService.getUserByUsername(username);
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.FOUND);
+    }
+
 
 
 }

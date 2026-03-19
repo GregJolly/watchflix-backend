@@ -23,6 +23,15 @@ public class UserMovie {
     @Column(name = "tmdb_id", nullable = false)
     private Integer tmdbId;
 
+    @Column(nullable = true)
+    private String title;
+
+    @Column(nullable = true)
+    private String posterPath;
+
+    @Column(nullable = true)
+    private String releaseDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name="status", nullable = false)
     private MovieStatus status;
@@ -42,11 +51,14 @@ public class UserMovie {
     public UserMovie() {
     }
 
-    public UserMovie(UUID id, User user, Integer tmdbId, MovieStatus status, boolean favorite, Integer rating, Instant createdAt, Instant updatedAt) {
+    public UserMovie(UUID id, User user, Integer tmdbId, MovieStatus status, String title, String posterPath, String releaseDate,  boolean favorite, Integer rating, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.user = user;
         this.tmdbId = tmdbId;
         this.status = status;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.releaseDate = releaseDate;
         this.favorite = favorite;
         this.rating = rating;
         this.createdAt = createdAt;
@@ -111,6 +123,34 @@ public class UserMovie {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
     }
 
     public void setUpdatedAt(Instant updatedAt) {

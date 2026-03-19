@@ -7,7 +7,10 @@ public record AddMovieRequestDto(
         @NotNull
         Integer tmdbId,
         @NotNull
-        MovieStatus status
+        MovieStatus status,
+        String title,
+        String posterPath,
+        String releaseDate
 
 ) {
 }

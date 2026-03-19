@@ -62,16 +62,16 @@ public class UserServiceImpl implements UserService {
         if (userMovieRepository.existsByUserAndTmdbId(user, request.tmdbId())) {
             throw new MovieAlreadyAddedException(request.tmdbId());
         }
-        UserMovie userMovie = new UserMovie(
-                null,
-                user,
-                request.tmdbId(),
-                request.status(),
-                false,
-                null,
-                now,
-                now
-                );
+        UserMovie userMovie = new UserMovie();
+        userMovie.setUser(user);
+        userMovie.setTmdbId(request.tmdbId());
+        userMovie.setStatus(request.status());
+        userMovie.setFavorite(false);
+        userMovie.setTitle(request.title());
+        userMovie.setPosterPath(request.posterPath());
+        userMovie.setReleaseDate(request.releaseDate());
+        userMovie.setCreatedAt(Instant.now());
+        userMovie.setUpdatedAt(Instant.now());
 
         return userMovieRepository.save(userMovie);
     }
@@ -113,6 +113,7 @@ public class UserServiceImpl implements UserService {
         if(userMovie.getStatus() == MovieStatus.WATCHED){
             userMovie.setStatus(MovieStatus.WATCHLIST);
             userMovie.setRating(null);
+
         }
         else
         {

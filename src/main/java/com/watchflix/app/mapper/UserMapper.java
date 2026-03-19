@@ -5,6 +5,7 @@ import com.watchflix.app.domain.dto.request.*;
 import com.watchflix.app.domain.dto.response.AuthResponseDto;
 import com.watchflix.app.domain.dto.response.UserDto;
 import com.watchflix.app.domain.dto.response.UserMovieDto;
+import com.watchflix.app.domain.dto.response.UserProfileDto;
 import com.watchflix.app.domain.entity.User;
 import com.watchflix.app.domain.entity.UserMovie;
 import com.watchflix.app.domain.tmdb.TmdbMovieResponse;
@@ -20,6 +21,4 @@ public interface UserMapper {
     //Response Mapping
     UserDto toDto (User user);
     UserMovieDto toDto(UserMovie movie, TmdbMovieResponse tmdbMovie);
-
-
 }
